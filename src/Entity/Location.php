@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\Location\LocationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
@@ -30,6 +32,18 @@ class Location
 
     #[ORM\Column(type: 'string', length: 50)]
     private $zip;
+
+    #[ORM\OneToMany(mappedBy: 'location', targetEntity: IPAddress::class, orphanRemoval: true)]
+    private $iPAddresses;
+
+    #[ORM\OneToOne(inversedBy: 'location', targetEntity: Weather::class, cascade: ['persist', 'remove'], fetch: 'EAGER')]
+    #[ORM\JoinColumn(nullable: true)]
+    private $weather;
+
+    public function __construct()
+    {
+        $this->iPAddresses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,6 +118,48 @@ class Location
     public function setZip(string $zip): self
     {
         $this->zip = $zip;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|IPAddress[]
+     */
+    public function getIPAddresses(): Collection
+    {
+        return $this->iPAddresses;
+    }
+
+    public function addIPAddress(IPAddress $iPAddress): self
+    {
+        if (!$this->iPAddresses->contains($iPAddress)) {
+            $this->iPAddresses[] = $iPAddress;
+            $iPAddress->setLocation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIPAddress(IPAddress $iPAddress): self
+    {
+        if ($this->iPAddresses->removeElement($iPAddress)) {
+            // set the owning side to null (unless already changed)
+            if ($iPAddress->getLocation() === $this) {
+                $iPAddress->setLocation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getWeather(): ?Weather
+    {
+        return $this->weather;
+    }
+
+    public function setWeather(Weather $weather): self
+    {
+        $this->weather = $weather;
 
         return $this;
     }

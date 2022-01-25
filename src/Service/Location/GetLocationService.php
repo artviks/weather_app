@@ -3,22 +3,35 @@
 namespace App\Service\Location;
 
 
-use App\Entity\IPAddress;
 use App\Entity\Location;
 use App\Repository\Location\LiveLocationRepositoryInterface;
-use App\Repository\Location\LocationRepository;
 use App\Service\IP\GetIPService;
+use Doctrine\Persistence\ManagerRegistry;
 
 class GetLocationService
 {
     public function __construct(
+        private GetIPService $getIP,
         private LiveLocationRepositoryInterface $liveRepository,
-        private LocationRepository $repository
+        private ManagerRegistry $doctrine
     ) {
     }
 
-    public function execute(IPAddress $ip): Location
+    public function execute(): Location
     {
-        return $this->liveRepository->findByIPAddress($ip);
+        $ip = $this->getIP->execute();
+
+        if ($ip->getLocation()) {
+            return $ip->getLocation();
+        }
+
+        $location = $this->liveRepository->findByIPAddress($ip);
+        $location->addIPAddress($ip);
+
+        $entityManager = $this->doctrine->getManager();
+        $entityManager->persist($location);
+        $entityManager->flush();
+
+        return $location;
     }
 }

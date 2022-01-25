@@ -16,6 +16,10 @@ class IPAddress
     #[ORM\Column(type: 'string', length: 45)]
     private $ip;
 
+    #[ORM\ManyToOne(targetEntity: Location::class, inversedBy: 'iPAddresses')]
+    #[ORM\JoinColumn(nullable: true)]
+    private $location;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +33,18 @@ class IPAddress
     public function setIp(string $ip): self
     {
         $this->ip = $ip;
+
+        return $this;
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): self
+    {
+        $this->location = $location;
 
         return $this;
     }

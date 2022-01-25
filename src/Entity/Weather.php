@@ -37,6 +37,9 @@ class Weather
     #[ORM\Column(type: 'integer')]
     private $clouds;
 
+    #[ORM\OneToOne(mappedBy: 'weather', targetEntity: Location::class, cascade: ['persist', 'remove'])]
+    private $location;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -134,6 +137,23 @@ class Weather
     public function setClouds(int $clouds): self
     {
         $this->clouds = $clouds;
+
+        return $this;
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(Location $location): self
+    {
+        // set the owning side of the relation if necessary
+        if ($location->getWeather() !== $this) {
+            $location->setWeather($this);
+        }
+
+        $this->location = $location;
 
         return $this;
     }
