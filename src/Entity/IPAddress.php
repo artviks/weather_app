@@ -16,7 +16,7 @@ class IPAddress
     #[ORM\Column(type: 'string', length: 45)]
     private $ip;
 
-    #[ORM\ManyToOne(targetEntity: Location::class, inversedBy: 'iPAddresses')]
+    #[ORM\ManyToOne(targetEntity: Location::class, fetch: 'EAGER', inversedBy: 'iPAddresses')]
     #[ORM\JoinColumn(nullable: true)]
     private $location;
 

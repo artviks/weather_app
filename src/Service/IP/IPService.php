@@ -6,12 +6,13 @@ use App\Entity\IPAddress;
 use App\Repository\IPAdressRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class GetIPService
+class IPService
 {
     public function __construct(
         private IPAdressRepository $repository,
-        private ManagerRegistry $doctrine
-    ) {
+        private ManagerRegistry    $doctrine
+    )
+    {
     }
 
     public function execute(): IPAddress

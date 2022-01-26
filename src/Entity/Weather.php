@@ -69,9 +69,9 @@ class Weather
         return $this;
     }
 
-    public function getTemperature(): ?int
+    public function getTemperature(): ?float
     {
-        return $this->temperature;
+        return $this->temperature / 100;
     }
 
     public function setTemperature(int $temperature): self
@@ -81,9 +81,9 @@ class Weather
         return $this;
     }
 
-    public function getFeelsLike(): ?int
+    public function getFeelsLike(): ?float
     {
-        return $this->feels_like;
+        return $this->feels_like / 100;
     }
 
     public function setFeelsLike(int $feels_like): self
@@ -117,9 +117,9 @@ class Weather
         return $this;
     }
 
-    public function getWindSpeed(): ?int
+    public function getWindSpeed(): ?float
     {
-        return $this->wind_speed;
+        return $this->wind_speed / 100;
     }
 
     public function setWindSpeed(int $wind_speed): self

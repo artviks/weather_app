@@ -30,9 +30,6 @@ class Location
     #[ORM\Column(type: 'string', length: 50)]
     private $city;
 
-    #[ORM\Column(type: 'string', length: 50)]
-    private $zip;
-
     #[ORM\OneToMany(mappedBy: 'location', targetEntity: IPAddress::class, orphanRemoval: true)]
     private $iPAddresses;
 
@@ -106,18 +103,6 @@ class Location
     public function setCity(string $city): self
     {
         $this->city = $city;
-
-        return $this;
-    }
-
-    public function getZip(): ?string
-    {
-        return $this->zip;
-    }
-
-    public function setZip(string $zip): self
-    {
-        $this->zip = $zip;
 
         return $this;
     }
