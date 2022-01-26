@@ -1,6 +1,6 @@
 This is a simple web app to fetch weather and location data from public apis and display data in json.
 
-PHP 8.0 required
+PHP 8.0 required, symfony binary
 
 To use this app:
 
